@@ -1,0 +1,626 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Dark Theme Colors */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #1a1a2e;
+    --bg-tertiary: #16213e;
+    
+    /* Accent Colors */
+    --purple-primary: #7b2cbf;
+    --purple-light: #9d4edd;
+    --blue-primary: #3a86ff;
+    --blue-light: #4895ef;
+    --green-primary: #06ffa5;
+    --green-light: #00ff88;
+    
+    /* Text Colors */
+    --text-primary: #e8e8e8;
+    --text-secondary: #b8b8b8;
+    --text-muted: #888888;
+    
+    /* Status Colors */
+    --danger: #ff006e;
+    --warning: #ffbe0b;
+    --success: #06ffa5;
+    
+    /* Borders and Shadows */
+    --border-radius: 12px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+@font-face {
+    font-family: 'RuneScape UF';
+    src: url('./fonts/runescape_uf.woff');
+    font-display: swap; 
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--purple-light), var(--blue-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.tagline {
+    color: yellow;
+    font-size: 1.8rem;
+    font-family: "RuneScape UF";
+}
+
+/* Add Habit Button */
+.add-habit-section {
+    margin-bottom: 30px;
+}
+
+.add-habit-btn {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--purple-primary), var(--blue-primary));
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.add-habit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.plus-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Habits List */
+.habits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Habit Card */
+.habit-card {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.habit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--purple-primary);
+}
+
+.habit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.habit-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--purple-light);
+}
+
+.habit-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 1.2rem;
+}
+
+.icon-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.icon-btn.add-occurrence {
+    color: var(--green-primary);
+}
+
+.icon-btn.add-occurrence:hover {
+    background: rgba(6, 255, 165, 0.1);
+    color: var(--green-light);
+}
+
+.icon-btn.edit {
+    color: var(--blue-primary);
+}
+
+.icon-btn.edit:hover {
+    background: rgba(58, 134, 255, 0.1);
+    color: var(--blue-light);
+}
+
+.icon-btn.delete {
+    color: var(--danger);
+}
+
+.icon-btn.delete:hover {
+    background: rgba(255, 0, 110, 0.1);
+    color: var(--danger);
+}
+
+/* Streak Information */
+.streak-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.streak-item {
+    background: var(--bg-tertiary);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.streak-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.streak-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--green-primary);
+}
+
+.streak-value.occurrences {
+    color: var(--warning);
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 500px;
+    padding: 0;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-small {
+    max-width: 400px;
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    color: var(--purple-light);
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Forms */
+form {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--purple-primary);
+    box-shadow: 0 0 0 2px rgba(123, 44, 191, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--purple-primary), var(--blue-primary));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #cc0055;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+/* Motivational Messages */
+.motivational-message {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, var(--purple-primary), var(--blue-primary));
+    color: white;
+    padding: 16px 24px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 300px;
+}
+
+.motivational-message.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.empty-state h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+}
+
+.empty-state p {
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .habit-card {
+        padding: 15px;
+    }
+    
+    .habit-name {
+        font-size: 1.1rem;
+    }
+    
+    .streak-info {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .motivational-message {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        max-width: none;
+    }
+    
+    .modal-content {
+        width: 95%;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.habit-card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Badge Styles */
+.badge-display {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.badge-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--warning);
+    font-size: 0.95rem;
+}
+
+.badge-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.view-all-badges {
+    background: none;
+    border: none;
+    color: var(--purple-light);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 0;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.view-all-badges:hover {
+    color: var(--purple-primary);
+}
+
+/* Next Badge Styles */
+.next-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    background: rgba(123, 44, 191, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(123, 44, 191, 0.2);
+    margin-top: 10px;
+}
+
+.next-badge-label {
+    color: var(--text-muted);
+}
+
+.next-badge-name {
+    color: var(--purple-light);
+    font-weight: 500;
+}
+
+.next-badge-time {
+    color: var(--green-primary);
+    font-weight: 600;
+    margin-left: auto;
+}
+
+.next-badge.all-earned {
+    background: rgba(6, 255, 165, 0.1);
+    border-color: rgba(6, 255, 165, 0.2);
+}
+
+.next-badge.all-earned .next-badge-label {
+    color: var(--green-light);
+    font-weight: 600;
+}
+
+/* Badges Modal Styles */
+.badges-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.badge-row:hover {
+    transform: translateX(5px);
+    border-color: var(--purple-primary);
+}
+
+.badge-row:last-child {
+    margin-bottom: 0;
+}
+
+.badge-name {
+    color: var(--warning);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.badge-date {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.no-badges {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--purple-primary);
+}

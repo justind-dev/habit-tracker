@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Habit Tracker</h1>
+            <p class="tagline">"To live is to suffer, to survive is to find some meaning in the suffering."</p>
+        </header>
+
+        <main>
+            <!-- Add New Habit Button -->
+            <div class="add-habit-section">
+                <button id="addHabitBtn" class="add-habit-btn">
+                    <span class="plus-icon">+</span>
+                    <span>Add New Habit</span>
+                </button>
+            </div>
+
+            <!-- Habits List -->
+            <div id="habitsList" class="habits-list">
+                <!-- Habits will be dynamically inserted here -->
+            </div>
+        </main>
+
+        <!-- Add/Edit Habit Modal -->
+        <div id="habitModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add New Habit</h2>
+                    <button class="close-btn" id="closeModalBtn">&times;</button>
+                </div>
+                <form id="habitForm">
+                    <input type="hidden" id="habitId">
+                    <div class="form-group">
+                        <label for="habitName">Habit Name:</label>
+                        <input type="text" id="habitName" placeholder="e.g., Stop Eating Junk Food" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="datetime-local" id="startDate" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Occurrence Modal -->
+        <div id="occurrenceModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Occurrence</h2>
+                    <button class="close-btn" id="closeOccurrenceBtn">&times;</button>
+                </div>
+                <form id="occurrenceForm">
+                    <input type="hidden" id="occurrenceHabitId">
+                    <div class="form-group">
+                        <label for="occurrenceDate">Date & Time:</label>
+                        <input type="datetime-local" id="occurrenceDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="occurrenceNotes">Notes:</label>
+                        <textarea id="occurrenceNotes" rows="3" placeholder="Optional notes about this occurrence"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Occurrence</button>
+                        <button type="button" class="btn btn-secondary" id="cancelOccurrenceBtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h2>Confirm Delete</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this habit and all its occurrences?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                    <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Modal -->
+        <div id="badgesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>All Badges - <span id="badgeHabitName"></span></h2>
+                    <button class="close-btn" id="closeBadgesBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="badgesList" class="badges-list">
+                        <!-- Badges will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Motivational Messages -->
+        <div id="motivationalMessage" class="motivational-message">
+            <p id="messageText"></p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
