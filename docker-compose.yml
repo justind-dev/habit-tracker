@@ -6,10 +6,4 @@ services:
       - "8080:80"
     volumes:
       - ./web:/usr/share/nginx/html:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - nginx_cache:/var/cache/nginx
     restart: unless-stopped
-    read_only: false
-
-volumes:
-  nginx_cache:
