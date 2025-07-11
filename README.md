@@ -20,7 +20,17 @@ A minimalist, self-hosted habit tracking application with a gamified badge syste
 
 ## Screenshot
 
-*Add a screenshot of your application here*
+### Main Interface
+![Habit Tracker Main Interface](images/main.png)
+
+### Adding a New Habit
+![Add Habit Modal](images/add-habit.png)
+
+### Track Occurences
+![Badge System](images/occurences.png)
+
+### Badge System
+![Badge System](images/badges.png)
 
 ## Getting Started
 
