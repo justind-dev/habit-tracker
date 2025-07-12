@@ -437,6 +437,76 @@ textarea {
     margin-top: 24px;
 }
 
+/* Occurrence Management Styles */
+.modal-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+.occurrences-section h3 {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.existing-occurrences {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.occurrence-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.occurrence-item:hover {
+    border-color: var(--purple-primary);
+    transform: translateX(2px);
+}
+
+.occurrence-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.occurrence-date {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+
+.occurrence-note {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.occurrence-actions {
+    margin-left: 10px;
+}
+
+.no-occurrences {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 20px;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
 /* Motivational Messages */
 .motivational-message {
     position: fixed;
