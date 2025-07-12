@@ -691,50 +691,39 @@ class HabitTracker {
             habits: this.habits
         };
         
+        const filename = `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
         const dataStr = JSON.stringify(exportData, null, 2);
         
-        // Try modern approach first
+        // Try Web Share API first on mobile
         if (navigator.share && navigator.canShare) {
-            const file = new File([dataStr], `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`, {
-                type: 'application/json'
-            });
+            const file = new File([dataStr], filename, { type: 'application/json' });
             
             if (navigator.canShare({ files: [file] })) {
                 navigator.share({
                     files: [file],
                     title: 'Habit Tracker Backup'
                 }).catch(() => {
-                    this.fallbackExport(dataStr);
+                    this.dataUrlDownload(dataStr, filename);
                 });
                 return;
             }
         }
-    
-    this.fallbackExport(dataStr);
-}
-
-    fallbackExport(dataStr) {
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
         
-        // Create link with better mobile support
+        // Fallback to data URL approach
+        this.dataUrlDownload(dataStr, filename);
+    }
+
+    dataUrlDownload(dataStr, filename) {
+        const dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(dataStr);
         const link = document.createElement('a');
-        link.href = url;
-        link.download = `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
+        link.href = dataUrl;
+        link.download = filename;
         link.style.display = 'none';
         
-        // Add to DOM, trigger download, cleanup
         document.body.appendChild(link);
-        
-        // Use both click and programmatic trigger
         link.click();
-        
-        // Cleanup after short delay
-        setTimeout(() => {
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        }, 100);
-}
+        document.body.removeChild(link);
+    }
 
     generateUniqueId() {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
