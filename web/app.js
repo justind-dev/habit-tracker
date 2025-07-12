@@ -560,10 +560,9 @@ class HabitTracker {
             return;
         }
         
-        // Show most recent 5 occurrences
-        const recentOccurrences = habit.occurrences.slice(0, 5);
+        const habitOccurences = habit.occurrences;
         
-        container.innerHTML = recentOccurrences.map(occurrence => {
+        container.innerHTML = habitOccurences.map(occurrence => {
             const date = new Date(occurrence.date);
             const formattedDate = date.toLocaleDateString('en-US', { 
                 month: 'short', 
