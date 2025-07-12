@@ -381,71 +381,73 @@ class HabitTracker {
             return;
         }
         
-        habitsList.innerHTML = this.habits.map(habit => {
-            const latestBadges = this.getLatestBadges(habit, 3);
-            const nextBadge = this.getNextBadge(habit);
-            
-            const badgesHtml = latestBadges.length > 0 ? `
-                <div class="badge-display">
-                    <div class="badge-items">
-                        ${latestBadges.map(badge => 
-                            `<span class="badge-item">${this.formatBadgeDisplay(badge)}</span>`
-                        ).join(', ')}
-                    </div>
-                    ${habit.earnedBadges.length > 3 ? 
-                        `<button class="view-all-badges" onclick="tracker.openBadgesModal('${habit.id}')">View All Badges</button>` 
-                        : ''
-                    }
-                </div>
-            ` : '';
+        habitsList.innerHTML = this.habits.map(habit => this.renderHabitCard(habit)).join('');
+    }
 
-            const nextBadgeHtml = nextBadge ? `
-                <div class="next-badge">
-                    <span class="next-badge-label">Next Badge:</span>
-                    <span class="next-badge-name">⭐ ${nextBadge.name}</span>
-                    <span class="next-badge-time">in ${nextBadge.formattedTimeRemaining}</span>
+    renderHabitCard(habit) {
+        const latestBadges = this.getLatestBadges(habit, 3);
+        const nextBadge = this.getNextBadge(habit);
+        
+        const badgesHtml = latestBadges.length > 0 ? `
+            <div class="badge-display">
+                <div class="badge-items">
+                    ${latestBadges.map(badge => 
+                        `<span class="badge-item">${this.formatBadgeDisplay(badge)}</span>`
+                    ).join(', ')}
                 </div>
-            ` : `
-                <div class="next-badge all-earned">
-                    <span class="next-badge-label">🏆 All badges earned! Amazing!</span>
-                </div>
-            `;
-            
-            return `
-                <div class="habit-card" data-id="${habit.id}">
-                    <div class="habit-header">
-                        <h3 class="habit-name">${this.escapeHtml(habit.name)}</h3>
-                        <div class="habit-actions">
-                            <button class="icon-btn add-occurrence" title="Add Occurrence" onclick="tracker.openOccurrenceModal('${habit.id}')">
-                                +
-                            </button>
-                            <button class="icon-btn edit" title="Edit Habit" onclick="tracker.openHabitModal('${habit.id}')">
-                                ✏️
-                            </button>
-                            <button class="icon-btn delete" title="Delete Habit" onclick="tracker.openDeleteModal('${habit.id}')">
-                                🗑️
-                            </button>
-                        </div>
+                ${habit.earnedBadges.length > 3 ? 
+                    `<button class="view-all-badges" onclick="tracker.openBadgesModal('${habit.id}')">View All Badges</button>` 
+                    : ''
+                }
+            </div>
+        ` : '';
+
+        const nextBadgeHtml = nextBadge ? `
+            <div class="next-badge">
+                <span class="next-badge-label">Next Badge:</span>
+                <span class="next-badge-name">⭐ ${nextBadge.name}</span>
+                <span class="next-badge-time">in ${nextBadge.formattedTimeRemaining}</span>
+            </div>
+        ` : `
+            <div class="next-badge all-earned">
+                <span class="next-badge-label">🏆 All badges earned! Amazing!</span>
+            </div>
+        `;
+        
+        return `
+            <div class="habit-card" data-id="${habit.id}">
+                <div class="habit-header">
+                    <h3 class="habit-name">${this.escapeHtml(habit.name)}</h3>
+                    <div class="habit-actions">
+                        <button class="icon-btn add-occurrence" title="Add Occurrence" onclick="tracker.openOccurrenceModal('${habit.id}')">
+                            +
+                        </button>
+                        <button class="icon-btn edit" title="Edit Habit" onclick="tracker.openHabitModal('${habit.id}')">
+                            ✏️
+                        </button>
+                        <button class="icon-btn delete" title="Delete Habit" onclick="tracker.openDeleteModal('${habit.id}')">
+                            🗑️
+                        </button>
                     </div>
-                    <div class="streak-info">
-                        <div class="streak-item">
-                            <div class="streak-label">Current Streak</div>
-                            <div class="streak-value">${this.calculateCurrentStreak(habit)}</div>
-                        </div>
-                        <div class="streak-item">
-                            <div class="streak-label">Longest Streak</div>
-                            <div class="streak-value">${this.calculateLongestStreak(habit)}</div>
-                        </div>
-                        <div class="streak-item">
-                            <div class="streak-label">Occurrences</div>
-                            <div class="streak-value occurrences">${habit.occurrences.length}</div>
-                        </div>
-                    </div>
-                    ${badgesHtml}
-                    ${nextBadgeHtml}
                 </div>
-            `;
-        }).join('');
+                <div class="streak-info">
+                    <div class="streak-item">
+                        <div class="streak-label">Current Streak</div>
+                        <div class="streak-value">${this.calculateCurrentStreak(habit)}</div>
+                    </div>
+                    <div class="streak-item">
+                        <div class="streak-label">Longest Streak</div>
+                        <div class="streak-value">${this.calculateLongestStreak(habit)}</div>
+                    </div>
+                    <div class="streak-item">
+                        <div class="streak-label">Occurrences</div>
+                        <div class="streak-value occurrences">${habit.occurrences.length}</div>
+                    </div>
+                </div>
+                ${badgesHtml}
+                ${nextBadgeHtml}
+            </div>
+        `;
     }
 
     // Modal Methods
