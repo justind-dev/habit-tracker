@@ -683,6 +683,14 @@ class HabitTracker {
         }
     }
 
+    confirmDeleteOccurrence() {
+        const confirmBtn = document.getElementById('confirmDeleteOccurrenceBtn');
+        if (confirmBtn && confirmBtn.dataset.habitId && confirmBtn.dataset.occurrenceId) {
+            this.deleteOccurrence(confirmBtn.dataset.habitId, confirmBtn.dataset.occurrenceId);
+            this.closeDeleteOccurrenceModal();
+        }
+    }
+
     // Utility Methods
     formatDateTimeLocal(date) {
         const year = date.getFullYear();
