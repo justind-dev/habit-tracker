@@ -211,7 +211,6 @@ class HabitTracker {
             habit.occurrences.push(occurrence);
             habit.occurrences.sort((a, b) => new Date(b.date) - new Date(a.date));
             
-            // Update streak and badges
             this.updateStreakAndBadges(habit);
             
             this.saveToStorage();
@@ -251,18 +250,23 @@ class HabitTracker {
 
     calculateEarnedBadges(habit) {
         const now = new Date();
-        const streakStart = new Date(habit.currentStreakStart);
-        const streakDuration = now - streakStart;
+        let currentStreakStart;
         
+        if (habit.occurrences.length === 0) {
+            currentStreakStart = new Date(habit.startDate);
+        } else {
+            currentStreakStart = new Date(habit.occurrences[0].date);
+        }
+        
+        const currentStreakDuration = now - currentStreakStart;
         const earnedBadges = [];
         
-        // Check each badge definition (sorted ascending for proper calculation)
         for (const badge of this.badgeDefinitions) {
-            if (streakDuration >= badge.milliseconds) {
+            if (currentStreakDuration >= badge.milliseconds) {
                 earnedBadges.push({
                     id: badge.id,
                     name: badge.name,
-                    earnedAt: new Date(streakStart.getTime() + badge.milliseconds).toISOString()
+                    earnedAt: new Date(currentStreakStart.getTime() + badge.milliseconds).toISOString()
                 });
             }
         }
@@ -305,39 +309,50 @@ class HabitTracker {
         return `⭐ ${badge.name}`;
     }
 
-    // Streak calculations
     calculateCurrentStreak(habit) {
         const now = new Date();
-        const streakStart = new Date(habit.currentStreakStart);
-        const diff = now - streakStart;
-        return this.formatDuration(diff);
+        
+        if (habit.occurrences.length === 0) {
+            const streakStart = new Date(habit.startDate);
+            return this.formatDuration(now - streakStart);
+        }
+        
+        const mostRecentOccurrence = new Date(habit.occurrences[0].date);
+        
+        return this.formatDuration(now - mostRecentOccurrence);
     }
 
     calculateLongestStreak(habit) {
         if (habit.occurrences.length === 0) {
+            // No occurrences, longest streak is current streak
             return this.calculateCurrentStreak(habit);
         }
         
-        const occurrences = [...habit.occurrences].sort((a, b) => 
+        const now = new Date();
+        const startDate = new Date(habit.startDate);
+        const sortedOccurrences = [...habit.occurrences].sort((a, b) => 
             new Date(a.date) - new Date(b.date)
         );
         
         let longestStreak = 0;
-        let previousDate = new Date(habit.startDate);
+        let previousDate = startDate;
         
-        occurrences.forEach(occurrence => {
-            const currentDate = new Date(occurrence.date);
-            const streak = currentDate - previousDate;
-            if (streak > longestStreak) {
-                longestStreak = streak;
+        // Check streaks between occurrences
+        for (const occurrence of sortedOccurrences) {
+            const occurrenceDate = new Date(occurrence.date);
+            const streakLength = occurrenceDate - previousDate;
+            
+            if (streakLength > longestStreak) {
+                longestStreak = streakLength;
             }
-            previousDate = currentDate;
-        });
+            
+            previousDate = occurrenceDate;
+        }
         
-        // Check current streak
-        const currentStreak = new Date() - previousDate;
-        if (currentStreak > longestStreak) {
-            longestStreak = currentStreak;
+        // Check current streak (from last occurrence to now)
+        const currentStreakLength = now - previousDate;
+        if (currentStreakLength > longestStreak) {
+            longestStreak = currentStreakLength;
         }
         
         return this.formatDuration(longestStreak);
