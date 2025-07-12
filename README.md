@@ -74,7 +74,7 @@ docker-compose down
 - Click the "+" button on any habit card to log when the habit occurred
 - Add optional notes to provide context
 - The app will automatically recalculate your streaks and badges
-- From this pop-up you can also see existing occurrences as well as a '🗑️' for them
+- From this pop-up you can also see existing occurrences as well as a '🗑️' for deleting them
 
 ### Badge System
 Earn badges for maintaining streaks:
