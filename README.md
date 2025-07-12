@@ -10,9 +10,10 @@ A minimalist, self-hosted habit tracking application with a gamified badge syste
 ## Features
 
 - **Simple Habit Tracking**: Track any habit with customizable start dates
+- **Occurrence Management**: Record when habits occur with optional notes and delete individual occurrences
 - **Gamified Experience**: Earn badges for streak milestones (1 hour to 2+ years)
 - **Real-time Streak Calculation**: Live updates of current and longest streaks
-- **Occurrence Logging**: Record when habits occur with optional notes
+- **Data Backup & Restore**: Export and import your habit data as JSON files
 - **Dark Theme**: Easy on the eyes with a modern, cyberpunk-inspired design
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Local Storage**: All data stored in your browser - no external dependencies
@@ -73,6 +74,7 @@ docker-compose down
 - Click the "+" button on any habit card to log when the habit occurred
 - Add optional notes to provide context
 - The app will automatically recalculate your streaks and badges
+- From this pop-up you can also see existing occurrences as well as a '🗑️' for them
 
 ### Badge System
 Earn badges for maintaining streaks:
@@ -84,6 +86,12 @@ Earn badges for maintaining streaks:
 - **Edit**: Click the pencil icon to modify habit details
 - **Delete**: Click the trash icon to permanently remove a habit
 - **View All Badges**: Click "View All Badges" to see your complete achievement history
+
+### Data Management
+- **Export**: Click "Export Data" to download a JSON backup file
+- **Import**: Click "Import Data" to restore from a backup file
+- Backup files include all habits, occurrences, and earned badges
+- Import will replace current data (backup recommended first)
 
 ## Technical Details
 
