@@ -694,22 +694,7 @@ class HabitTracker {
         const filename = `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
         const dataStr = JSON.stringify(exportData, null, 2);
         
-        // Try Web Share API first on mobile
-        if (navigator.share && navigator.canShare) {
-            const file = new File([dataStr], filename, { type: 'application/json' });
-            
-            if (navigator.canShare({ files: [file] })) {
-                navigator.share({
-                    files: [file],
-                    title: 'Habit Tracker Backup'
-                }).catch(() => {
-                    this.dataUrlDownload(dataStr, filename);
-                });
-                return;
-            }
-        }
-        
-        // Fallback to data URL approach
+        // Execute download immediately to preserve user gesture
         this.dataUrlDownload(dataStr, filename);
     }
 
