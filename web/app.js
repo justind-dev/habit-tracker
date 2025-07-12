@@ -1,4 +1,36 @@
 class HabitTracker {
+
+    static BADGE_DEFINITIONS = [
+        { id: 'hour_1', name: '1 Hour', milliseconds: 3600000 },
+        { id: 'hour_3', name: '3 Hours', milliseconds: 10800000 },
+        { id: 'hour_6', name: '6 Hours', milliseconds: 21600000 },
+        { id: 'hour_12', name: '12 Hours', milliseconds: 43200000 },
+        { id: 'day_1', name: '1 Day', milliseconds: 86400000 },
+        { id: 'day_2', name: '2 Days', milliseconds: 172800000 },
+        { id: 'day_3', name: '3 Days', milliseconds: 259200000 },
+        { id: 'day_4', name: '4 Days', milliseconds: 345600000 },
+        { id: 'day_5', name: '5 Days', milliseconds: 432000000 },
+        { id: 'day_6', name: '6 Days', milliseconds: 518400000 },
+        { id: 'week_1', name: '1 Week', milliseconds: 604800000 },
+        { id: 'day_10', name: '10 Days', milliseconds: 864000000 },
+        { id: 'day_12', name: '12 Days', milliseconds: 1036800000 },
+        { id: 'week_2', name: '2 Weeks', milliseconds: 1209600000 },
+        { id: 'day_16', name: '16 Days', milliseconds: 1382400000 },
+        { id: 'week_3', name: '3 Weeks', milliseconds: 1814400000 },
+        { id: 'month_1', name: '1 Month', milliseconds: 2592000000 },
+        { id: 'day_50', name: '50 Days', milliseconds: 4320000000 },
+        { id: 'week_6', name: '6 Weeks', milliseconds: 3628800000 },
+        { id: 'month_2', name: '2 Months', milliseconds: 5184000000 },
+        { id: 'day_75', name: '75 Days', milliseconds: 6480000000 },
+        { id: 'month_3', name: '3 Months', milliseconds: 7776000000 },
+        { id: 'day_100', name: '100 Days', milliseconds: 8640000000 },
+        { id: 'month_4', name: '4 Months', milliseconds: 10368000000 },
+        { id: 'month_5', name: '5 Months', milliseconds: 12960000000 },
+        { id: 'month_6', name: '6 Months', milliseconds: 15552000000 },
+        { id: 'year_1', name: '1 Year', milliseconds: 31536000000 },
+        { id: 'year_2', name: '2 Years', milliseconds: 63072000000 }
+    ].sort((a, b) => a.milliseconds - b.milliseconds);
+
     constructor() {
         this.habits = [];
         this.currentEditId = null;
@@ -15,40 +47,6 @@ class HabitTracker {
             "You're worth it!",
             "Believe in yourself!"
         ];
-        
-        // Badge definitions in milliseconds
-        // TODO: We can add some more here. Honestly in the future it would be nice to have a modal
-        // for the user to be able to add their own.
-        this.badgeDefinitions = [
-            { id: 'hour_1', name: '1 Hour', milliseconds: 3600000 },
-            { id: 'hour_3', name: '3 Hours', milliseconds: 10800000 },
-            { id: 'hour_6', name: '6 Hours', milliseconds: 21600000 },
-            { id: 'hour_12', name: '12 Hours', milliseconds: 43200000 },
-            { id: 'day_1', name: '1 Day', milliseconds: 86400000 },
-            { id: 'day_2', name: '2 Days', milliseconds: 172800000 },
-            { id: 'day_3', name: '3 Days', milliseconds: 259200000 },
-            { id: 'day_4', name: '4 Days', milliseconds: 345600000 },
-            { id: 'day_5', name: '5 Days', milliseconds: 432000000 },
-            { id: 'day_6', name: '6 Days', milliseconds: 518400000 },
-            { id: 'week_1', name: '1 Week', milliseconds: 604800000 },
-            { id: 'day_10', name: '10 Days', milliseconds: 864000000 },
-            { id: 'day_12', name: '12 Days', milliseconds: 1036800000 },
-            { id: 'week_2', name: '2 Weeks', milliseconds: 1209600000 },
-            { id: 'day_16', name: '16 Days', milliseconds: 1382400000 },
-            { id: 'week_3', name: '3 Weeks', milliseconds: 1814400000 },
-            { id: 'month_1', name: '1 Month', milliseconds: 2592000000 },
-            { id: 'day_50', name: '50 Days', milliseconds: 4320000000 },
-            { id: 'week_6', name: '6 Weeks', milliseconds: 3628800000 },
-            { id: 'month_2', name: '2 Months', milliseconds: 5184000000 },
-            { id: 'day_75', name: '75 Days', milliseconds: 6480000000 },
-            { id: 'month_3', name: '3 Months', milliseconds: 7776000000 },
-            { id: 'day_100', name: '100 Days', milliseconds: 8640000000 },
-            { id: 'month_4', name: '4 Months', milliseconds: 10368000000 },
-            { id: 'month_5', name: '5 Months', milliseconds: 12960000000 },
-            { id: 'month_6', name: '6 Months', milliseconds: 15552000000 },
-            { id: 'year_1', name: '1 Year', milliseconds: 31536000000 },
-            { id: 'year_2', name: '2 Years', milliseconds: 63072000000 }
-        ].sort((a, b) => a.milliseconds - b.milliseconds); // Sort ascending for next badge calculation
         
         this.init();
     }
@@ -254,7 +252,7 @@ class HabitTracker {
         const currentStreakDuration = now - currentStreakStart;
         const earnedBadges = [];
         
-        for (const badge of this.badgeDefinitions) {
+        for (const badge of HabitTracker.BADGE_DEFINITIONS) {
             if (currentStreakDuration >= badge.milliseconds) {
                 earnedBadges.push({
                     id: badge.id,
@@ -276,7 +274,7 @@ class HabitTracker {
         const currentStreakDuration = now - streakStart;
         
         // Find the next badge that hasn't been earned yet
-        for (const badge of this.badgeDefinitions) {
+        for (const badge of HabitTracker.BADGE_DEFINITIONS) {
             if (currentStreakDuration < badge.milliseconds) {
                 const timeRemaining = badge.milliseconds - currentStreakDuration;
                 const earnTime = new Date(now.getTime() + timeRemaining);
