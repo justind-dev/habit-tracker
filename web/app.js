@@ -62,66 +62,49 @@ class HabitTracker {
     }
 
     bindEvents() {
-        // Add habit button
-        document.getElementById('addHabitBtn').addEventListener('click', () => this.openHabitModal());
-        
-        // Modal controls
-        document.getElementById('closeModalBtn').addEventListener('click', () => this.closeHabitModal());
-        document.getElementById('cancelBtn').addEventListener('click', () => this.closeHabitModal());
-        document.getElementById('habitForm').addEventListener('submit', (e) => this.handleHabitSubmit(e));
-        
-        // Occurrence modal controls
-        document.getElementById('closeOccurrenceBtn').addEventListener('click', () => this.closeOccurrenceModal());
-        document.getElementById('cancelOccurrenceBtn').addEventListener('click', () => this.closeOccurrenceModal());
-        document.getElementById('occurrenceForm').addEventListener('submit', (e) => this.handleOccurrenceSubmit(e));
-        
-        // Delete modal controls
-        document.getElementById('confirmDeleteBtn').addEventListener('click', () => this.confirmDelete());
-        document.getElementById('cancelDeleteBtn').addEventListener('click', () => this.closeDeleteModal());
+    // Helper function for safe event binding
+    const bindEvent = (id, event, handler) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.addEventListener(event, handler);
+        }
+    };
 
-        // Import / export controls
-        // Todo: The above controls need to match the below in safe handling.
-        const exportBtn = document.getElementById('exportBtn');
-        const importBtn = document.getElementById('importBtn');
-        const importFile = document.getElementById('importFile');
-        
-        if (exportBtn) {
-            exportBtn.addEventListener('click', () => this.exportData());
-        }
-        
-        if (importBtn) {
-            importBtn.addEventListener('click', () => this.triggerImport());
-        }
-        
-        if (importFile) {
-            importFile.addEventListener('change', (e) => this.handleImport(e));
-        }
+    // Add habit button
+    bindEvent('addHabitBtn', 'click', () => this.openHabitModal());
+    
+    // Habit modal controls
+    bindEvent('closeModalBtn', 'click', () => this.closeHabitModal());
+    bindEvent('cancelBtn', 'click', () => this.closeHabitModal());
+    bindEvent('habitForm', 'submit', (e) => this.handleHabitSubmit(e));
+    
+    // Occurrence modal controls
+    bindEvent('closeOccurrenceBtn', 'click', () => this.closeOccurrenceModal());
+    bindEvent('cancelOccurrenceBtn', 'click', () => this.closeOccurrenceModal());
+    bindEvent('occurrenceForm', 'submit', (e) => this.handleOccurrenceSubmit(e));
+    
+    // Delete habit modal controls
+    bindEvent('confirmDeleteBtn', 'click', () => this.confirmDelete());
+    bindEvent('cancelDeleteBtn', 'click', () => this.closeDeleteModal());
 
-        // Delete occurrence modal controls
-        const confirmDeleteOccurrenceBtn = document.getElementById('confirmDeleteOccurrenceBtn');
-        const cancelDeleteOccurrenceBtn = document.getElementById('cancelDeleteOccurrenceBtn');
-        
-        if (confirmDeleteOccurrenceBtn) {
-            confirmDeleteOccurrenceBtn.addEventListener('click', () => this.confirmDeleteOccurrence());
-        }
-        
-        if (cancelDeleteOccurrenceBtn) {
-            cancelDeleteOccurrenceBtn.addEventListener('click', () => this.closeDeleteOccurrenceModal());
-        }
+    // Delete occurrence modal controls
+    bindEvent('confirmDeleteOccurrenceBtn', 'click', () => this.confirmDeleteOccurrence());
+    bindEvent('cancelDeleteOccurrenceBtn', 'click', () => this.closeDeleteOccurrenceModal());
 
-        
-        // Badges modal controls (will be added when HTML is updated)
-        const closeBadgesBtn = document.getElementById('closeBadgesBtn');
-        if (closeBadgesBtn) {
-            closeBadgesBtn.addEventListener('click', () => this.closeBadgesModal());
+    // Backup/restore controls
+    bindEvent('exportBtn', 'click', () => this.exportData());
+    bindEvent('importBtn', 'click', () => this.triggerImport());
+    bindEvent('importFile', 'change', (e) => this.handleImport(e));
+
+    // Badges modal controls
+    bindEvent('closeBadgesBtn', 'click', () => this.closeBadgesModal());
+    
+    // Close modals on outside click
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            this.closeAllModals();
         }
-        
-        // Close modals on outside click
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) {
-                this.closeAllModals();
-            }
-        });
+    });
     }
 
     // Storage methods
