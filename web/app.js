@@ -17,6 +17,8 @@ class HabitTracker {
         ];
         
         // Badge definitions in milliseconds
+        // TODO: We can add some more here. Honestly in the future it would be nice to have a modal
+        // for the user to be able to add their own.
         this.badgeDefinitions = [
             { id: 'hour_1', name: '1 Hour', milliseconds: 3600000 },
             { id: 'hour_3', name: '3 Hours', milliseconds: 10800000 },
@@ -76,6 +78,25 @@ class HabitTracker {
         // Delete modal controls
         document.getElementById('confirmDeleteBtn').addEventListener('click', () => this.confirmDelete());
         document.getElementById('cancelDeleteBtn').addEventListener('click', () => this.closeDeleteModal());
+
+        // Import / export controls
+        // Todo: The above controls need to match the below in safe handling.
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+        
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportData());
+        }
+        
+        if (importBtn) {
+            importBtn.addEventListener('click', () => this.triggerImport());
+        }
+        
+        if (importFile) {
+            importFile.addEventListener('change', (e) => this.handleImport(e));
+        }
+
         
         // Badges modal controls (will be added when HTML is updated)
         const closeBadgesBtn = document.getElementById('closeBadgesBtn');
@@ -620,6 +641,125 @@ class HabitTracker {
             this.saveToStorage();
             this.render();
         }, 60000);
+    }
+    
+    triggerImport() {
+        const importFile = document.getElementById('importFile');
+        if (importFile) {
+            importFile.click();
+        }
+    }
+
+    handleImport(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = this.importData(e.target.result, 'replace');
+            
+            if (result.success) {
+                this.showMotivationalMessage();
+            }
+            
+            // Reset file input
+            event.target.value = '';
+        };
+        
+        reader.readAsText(file);
+    }
+
+    // Backup/Restore Methods
+    exportData() {
+        const exportData = {
+            version: '1.0',
+            exportDate: new Date().toISOString(),
+            habits: this.habits
+        };
+        
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+
+    generateUniqueId() {
+        return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    importData(fileContent, mode = 'replace') {
+        try {
+            const importData = JSON.parse(fileContent);
+            
+            if (!importData.habits || !Array.isArray(importData.habits)) {
+                throw new Error('Invalid backup file format');
+            }
+
+            // Backup current data before import
+            const currentBackup = [...this.habits];
+            
+            if (mode === 'replace') {
+                this.habits = [];
+            }
+
+            // Process imported habits with ID conflict resolution
+            const importedHabits = importData.habits.map(habit => {
+                const newHabit = { ...habit };
+                
+                // Generate new IDs to prevent conflicts
+                const oldId = newHabit.id;
+                newHabit.id = this.generateUniqueId();
+                
+                // Update occurrence IDs and ensure they're valid
+                if (newHabit.occurrences && Array.isArray(newHabit.occurrences)) {
+                    newHabit.occurrences = newHabit.occurrences.map(occ => ({
+                        ...occ,
+                        id: this.generateUniqueId()
+                    }));
+                } else {
+                    newHabit.occurrences = [];
+                }
+
+                // Ensure required fields exist
+                if (!newHabit.currentStreakStart) {
+                    newHabit.currentStreakStart = newHabit.startDate;
+                }
+                if (!newHabit.earnedBadges) {
+                    newHabit.earnedBadges = [];
+                }
+
+                return newHabit;
+            });
+
+            // Add imported habits
+            this.habits.push(...importedHabits);
+
+            // Recalculate all streaks and badges
+            this.habits.forEach(habit => {
+                this.updateStreakAndBadges(habit);
+            });
+
+            this.saveToStorage();
+            this.render();
+            
+            return { success: true, importedCount: importedHabits.length };
+            
+        } catch (error) {
+            // Restore backup on failure
+            if (currentBackup) {
+                this.habits = currentBackup;
+                this.saveToStorage();
+                this.render();
+            }
+            
+            return { success: false, error: error.message };
+        }
     }
 }
 

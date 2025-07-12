@@ -101,6 +101,47 @@ header h1 {
     box-shadow: var(--shadow-md);
 }
 
+/* Backup/Restore Section */
+.backup-restore-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.backup-btn {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.backup-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--purple-primary);
+    background: var(--bg-tertiary);
+}
+
+.backup-btn .icon {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+    .backup-restore-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 .add-habit-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
