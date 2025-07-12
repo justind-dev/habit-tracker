@@ -97,6 +97,18 @@ class HabitTracker {
             importFile.addEventListener('change', (e) => this.handleImport(e));
         }
 
+        // Delete occurrence modal controls
+        const confirmDeleteOccurrenceBtn = document.getElementById('confirmDeleteOccurrenceBtn');
+        const cancelDeleteOccurrenceBtn = document.getElementById('cancelDeleteOccurrenceBtn');
+        
+        if (confirmDeleteOccurrenceBtn) {
+            confirmDeleteOccurrenceBtn.addEventListener('click', () => this.confirmDeleteOccurrence());
+        }
+        
+        if (cancelDeleteOccurrenceBtn) {
+            cancelDeleteOccurrenceBtn.addEventListener('click', () => this.closeDeleteOccurrenceModal());
+        }
+
         
         // Badges modal controls (will be added when HTML is updated)
         const closeBadgesBtn = document.getElementById('closeBadgesBtn');
@@ -215,6 +227,17 @@ class HabitTracker {
             
             this.saveToStorage();
             this.render();
+        }
+    }
+
+    deleteOccurrence(habitId, occurrenceId) {
+        const habit = this.habits.find(h => h.id === habitId);
+        if (habit) {
+            habit.occurrences = habit.occurrences.filter(o => o.id !== occurrenceId);
+            this.updateStreakAndBadges(habit);
+            this.saveToStorage();
+            this.render();
+            this.updateOccurrencesList(habitId); // Update the modal list
         }
     }
 
@@ -507,6 +530,69 @@ class HabitTracker {
         document.getElementById('occurrenceForm').reset();
     }
 
+    openDeleteOccurrenceModal(habitId, occurrenceId) {
+        const confirmBtn = document.getElementById('confirmDeleteOccurrenceBtn');
+        if (confirmBtn) {
+            confirmBtn.dataset.habitId = habitId;
+            confirmBtn.dataset.occurrenceId = occurrenceId;
+        }
+        document.getElementById('deleteOccurrenceModal').classList.add('active');
+    }
+
+    closeDeleteOccurrenceModal() {
+        document.getElementById('deleteOccurrenceModal').classList.remove('active');
+        const confirmBtn = document.getElementById('confirmDeleteOccurrenceBtn');
+        if (confirmBtn) {
+            delete confirmBtn.dataset.habitId;
+            delete confirmBtn.dataset.occurrenceId;
+        }
+    }
+    updateOccurrencesList(habitId) {
+        const habit = this.habits.find(h => h.id === habitId);
+        const container = document.getElementById('existingOccurrences');
+        
+        if (!habit || !container) return;
+        
+        if (habit.occurrences.length === 0) {
+            container.innerHTML = '<p class="no-occurrences">No occurrences recorded yet.</p>';
+            return;
+        }
+        
+        // Show most recent 5 occurrences
+        const recentOccurrences = habit.occurrences.slice(0, 5);
+        
+        container.innerHTML = recentOccurrences.map(occurrence => {
+            const date = new Date(occurrence.date);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit'
+            });
+            
+            const noteDisplay = occurrence.notes ? 
+                (occurrence.notes.length > 30 ? 
+                    occurrence.notes.substring(0, 30) + '...' : 
+                    occurrence.notes) : 
+                '';
+            
+            return `
+                <div class="occurrence-item">
+                    <div class="occurrence-info">
+                        <div class="occurrence-date">${formattedDate}</div>
+                        ${noteDisplay ? `<div class="occurrence-note">${this.escapeHtml(noteDisplay)}</div>` : ''}
+                    </div>
+                    <div class="occurrence-actions">
+                        <button class="icon-btn delete" title="Delete Occurrence" 
+                                onclick="tracker.openDeleteOccurrenceModal('${habitId}', '${occurrence.id}')">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
     openDeleteModal(habitId) {
         this.currentDeleteId = habitId;
         document.getElementById('deleteModal').classList.add('active');
@@ -557,6 +643,7 @@ class HabitTracker {
         this.closeOccurrenceModal();
         this.closeDeleteModal();
         this.closeBadgesModal();
+        this.closeDeleteOccurrenceModal();
     }
 
     // Form Handlers
