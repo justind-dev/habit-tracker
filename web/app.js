@@ -211,31 +211,24 @@ class HabitTracker {
 
     // Badge and Streak Methods
     updateStreakAndBadges(habit) {
-        // Determine current streak start
+        const previousStreakStart = habit.currentStreakStart;
+        
+        // determine current streak start
         if (habit.occurrences.length === 0) {
             habit.currentStreakStart = habit.startDate;
         } else {
-            // Find the start of the current streak
+            // Most recent occurrence is the start of current streak
             const sortedOccurrences = [...habit.occurrences].sort((a, b) => 
-                new Date(a.date) - new Date(b.date)
+                new Date(b.date) - new Date(a.date)
             );
-            
-            let streakStart = habit.startDate;
-            let previousDate = new Date(habit.startDate);
-            
-            for (const occurrence of sortedOccurrences) {
-                const occurrenceDate = new Date(occurrence.date);
-                // If this occurrence broke the streak, update streak start
-                if (occurrenceDate < previousDate) {
-                    streakStart = occurrence.date;
-                }
-                previousDate = occurrenceDate;
-            }
-            
-            habit.currentStreakStart = streakStart;
+            habit.currentStreakStart = sortedOccurrences[0].date;
         }
         
-        // Calculate earned badges based on current streak
+        // If streak was reset (moved forward in time), clear badges
+        if (previousStreakStart && new Date(habit.currentStreakStart) > new Date(previousStreakStart)) {
+            habit.earnedBadges = [];
+        }
+        
         habit.earnedBadges = this.calculateEarnedBadges(habit);
     }
 
