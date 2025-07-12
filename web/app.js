@@ -684,7 +684,6 @@ class HabitTracker {
         reader.readAsText(file);
     }
 
-    // Backup/Restore Methods
     exportData() {
         const exportData = {
             version: '1.0',
@@ -693,16 +692,49 @@ class HabitTracker {
         };
         
         const dataStr = JSON.stringify(exportData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
         
+        // Try modern approach first
+        if (navigator.share && navigator.canShare) {
+            const file = new File([dataStr], `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`, {
+                type: 'application/json'
+            });
+            
+            if (navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: 'Habit Tracker Backup'
+                }).catch(() => {
+                    this.fallbackExport(dataStr);
+                });
+                return;
+            }
+        }
+    
+    this.fallbackExport(dataStr);
+}
+
+    fallbackExport(dataStr) {
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        
+        // Create link with better mobile support
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(dataBlob);
+        link.href = url;
         link.download = `habit-tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
+        link.style.display = 'none';
+        
+        // Add to DOM, trigger download, cleanup
         document.body.appendChild(link);
+        
+        // Use both click and programmatic trigger
         link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
-    }
+        
+        // Cleanup after short delay
+        setTimeout(() => {
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }, 100);
+}
 
     generateUniqueId() {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
