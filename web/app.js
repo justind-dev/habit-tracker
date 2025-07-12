@@ -523,6 +523,8 @@ class HabitTracker {
         dateInput.max = this.formatDateTimeLocal(new Date());
         
         document.getElementById('occurrenceModal').classList.add('active');
+
+        this.updateOccurrencesList(habitId);
     }
 
     closeOccurrenceModal() {
