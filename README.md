@@ -82,6 +82,22 @@ Earn badges for maintaining streaks:
 - **Daily**: 1-6 days, 1-3 weeks  
 - **Long-term**: 1+ months, 50+ days, 1+ years
 
+### Adding Custom Badges
+
+Add custom badge images (128x128 PNG) to `web/images/` using the naming pattern: `badge_[duration]_image.png`
+
+Examples: `badge_1hour_image.png`, `badge_1day_image.png`, `badge_1week_image.png`
+
+#### Adding New Milestones
+1. Add image to `web/images/` following naming convention
+2. Add entry to `BADGE_DEFINITIONS` in `web/app.js`:
+```javascript
+{ id: '3month', name: '3 Months', milliseconds: 7776000000 }
+```
+3. App automatically uses custom image or falls back to 🔥 emoji
+
+Images display at 32x32 in cards, 96x96 in badge modal.
+
 ### Managing Habits
 - **Edit**: Click the pencil icon to modify habit details
 - **Delete**: Click the trash icon to permanently remove a habit
